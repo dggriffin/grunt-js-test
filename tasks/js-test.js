@@ -173,9 +173,12 @@ module.exports = function (grunt) {
         grunt.verbose.writeln('  --file filter:', file);
 
         tests = tests.filter(function (test) {
-          var match = normalize(test.file);
-          var pass = file == match;
-          grunt.verbose.writeln('    ', match, '=', pass ? 'true' : 'false');
+          var currentPath = normalize(process.cwd());
+          var absPathToTest = normalize(test.abs);
+          var relativePathToTest = absPathToTest.replace(currentPath, "");
+          var pass = file == relativePathToTest || file == absPathToTest;
+          grunt.verbose.writeln('    ', absPathToTest, '=', file == relativePathToTest ? 'true' : 'false');
+          grunt.verbose.writeln('    ', relativePathToTest, '=', file == absPathToTest ? 'true' : 'false');
           return pass;
         });
 
